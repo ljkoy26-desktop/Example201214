@@ -7,6 +7,21 @@
 #include "ExampleMFCDlg.h"
 #include "afxdialogex.h"
 
+
+//#include "WVBase.h"
+
+#include "WVChildA.h"
+#include "WVChildB.h"
+#include "WVChildC.h"
+#include "WVChildD.h"
+
+//class WVBase;
+
+class WVChildA;
+class WVChildB;
+class WVChildC;
+class WVChildD;
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -64,6 +79,7 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CExampleMFCDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -97,11 +113,6 @@ BOOL CExampleMFCDlg::OnInitDialog()
 	//  프레임워크가 이 작업을 자동으로 수행합니다.
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
-
-	
-	AfxMessageBox(_T("안녕"));
-
-
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -155,3 +166,41 @@ HCURSOR CExampleMFCDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
+{
+	/* 객체가 정상적으로 소멸되면서, 
+		 a->b->c->d 의 순서로 소멸되고 메모리릭이 없으면 성공!
+	*/
+
+
+	WVChildA* pa = new WVChildA; // 리스너
+	WVChildB* pb = new WVChildB; // 디스크립션 리스트
+	WVChildC* pc = new WVChildC; // 디스크립션
+	WVChildC* pc1 = new WVChildC; // 디스크립션
+	WVChildC* pc2 = new WVChildC; // 디스크립션
+	WVChildD* pd = new WVChildD; // 
+	
+	pc->m_aItem.Add(pd);
+	pa->m_aItem.Add(pc1); // 리스트는 없는 상태
+	pa->m_aItem.Add(pc); // 리스트는 없는 상태
+	pa->m_aItem.Add(pc2); // 리스트는 없는 상태
+	
+	for (int i = 0; pa->m_aItem.GetSize(); ++i)
+	{
+		if (pa->m_aItem.GetAt(i)->m_nType == WVBase::C)
+		{
+			/* 한개의 케이스 에서는 성공했지만, 
+				pc 가 여러개 있을경우나, 순서가 뒤죽박죽이면 조금 결과가 달라짐...
+			*/
+			WVBase* pItem = pa->m_aItem.ElementAt(i);
+			pa->m_aItem.RemoveAt(i);
+			pa->m_aItem.Add(pb);
+			pb->m_aItem.Add(pItem);
+			break;
+		}
+	}
+	delete pa;
+
+}
