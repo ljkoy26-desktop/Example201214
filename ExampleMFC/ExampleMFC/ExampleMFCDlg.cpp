@@ -8,19 +8,19 @@
 #include "afxdialogex.h"
 
 
-//#include "WVBase.h"
+//#include "LJHBase.h"
 
-#include "WVChildA.h"
-#include "WVChildB.h"
-#include "WVChildC.h"
-#include "WVChildD.h"
+#include "LJHChildA.h"
+#include "LJHChildB.h"
+#include "LJHChildC.h"
+#include "LJHChildD.h"
 
-//class WVBase;
+//class LJHBase;
 
-class WVChildA;
-class WVChildB;
-class WVChildC;
-class WVChildD;
+class LJHChildA;
+class LJHChildB;
+class LJHChildC;
+class LJHChildD;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -175,25 +175,25 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 	*/
 
 
-	WVChildA* pa = new WVChildA; // 리스너
-	WVChildB* pb = new WVChildB; // 디스크립션 리스트
-	WVChildC* pc = new WVChildC; // 디스크립션
-	//WVChildC* pc1 = new WVChildC; // 디스크립션
-	//WVChildC* pc2 = new WVChildC; // 디스크립션
-	WVChildD* pd = new WVChildD; // 
+	LJHChildA* pa = new LJHChildA; // 리스너
+	LJHChildB* pb = new LJHChildB; // 디스크립션 리스트
+	LJHChildC* pc = new LJHChildC; // 디스크립션
+	//LJHChildC* pc1 = new LJHChildC; // 디스크립션
+	//LJHChildC* pc2 = new LJHChildC; // 디스크립션
+	LJHChildD* pd = new LJHChildD; // 
 	
 	pc->m_aItem.Add(pd);
 	pa->m_aItem.Add(pc); // 리스트는 없는 상태
 	
 	for (int i = 0; pa->m_aItem.GetSize(); ++i)
 	{
-		if (pa->m_aItem.GetAt(i)->m_nType == WVBase::C)
+		if (pa->m_aItem.GetAt(i)->m_nType == LJHBase::C)
 		{
 			/* 한개의 케이스 에서는 성공했지만, 
 				pc 가 여러개 있을경우나, 순서가 뒤죽박죽이면 조금 결과가 달라짐...
 				노트북에서 출력 테스트 완료 20.12.15
 			*/
-			WVBase* pItem = pa->m_aItem.ElementAt(i);
+			LJHBase* pItem = pa->m_aItem.ElementAt(i);
 			pa->m_aItem.RemoveAt(i);
 			pa->m_aItem.Add(pb);
 			pb->m_aItem.Add(pItem);

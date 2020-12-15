@@ -33,19 +33,19 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="WVBase.h">
+    <ClInclude Include="LJHBase.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="WVChildA.h">
+    <ClInclude Include="LJHChildA.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="WVChildB.h">
+    <ClInclude Include="LJHChildB.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="WVChildC.h">
+    <ClInclude Include="LJHChildC.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="WVChildD.h">
+    <ClInclude Include="LJHChildD.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,16 +62,16 @@
     <ClCompile Include="WVBase.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WVChildA.cpp">
+    <ClCompile Include="LJHChildA.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WVChildB.cpp">
+    <ClCompile Include="LJHChildB.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WVChildC.cpp">
+    <ClCompile Include="LJHChildC.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WVChildD.cpp">
+    <ClCompile Include="LJHChildD.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

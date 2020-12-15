@@ -190,11 +190,11 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="WVBase.h" />
-    <ClInclude Include="WVChildA.h" />
-    <ClInclude Include="WVChildB.h" />
-    <ClInclude Include="WVChildC.h" />
-    <ClInclude Include="WVChildD.h" />
+    <ClInclude Include="LJHBase.h" />
+    <ClInclude Include="LJHChildA.h" />
+    <ClInclude Include="LJHChildB.h" />
+    <ClInclude Include="LJHChildC.h" />
+    <ClInclude Include="LJHChildD.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExampleMFC.cpp" />
@@ -206,10 +206,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WVBase.cpp" />
-    <ClCompile Include="WVChildA.cpp" />
-    <ClCompile Include="WVChildB.cpp" />
-    <ClCompile Include="WVChildC.cpp" />
-    <ClCompile Include="WVChildD.cpp" />
+    <ClCompile Include="LJHChildA.cpp" />
+    <ClCompile Include="LJHChildB.cpp" />
+    <ClCompile Include="LJHChildC.cpp" />
+    <ClCompile Include="LJHChildD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ExampleMFC.rc" />

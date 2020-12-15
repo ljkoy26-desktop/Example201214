@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "WVBase.h"
+#include "LJHBase.h"
 
 
-WVBase::WVBase()
+LJHBase::LJHBase()
 {
 }
 
 
-WVBase::~WVBase()
+LJHBase::~LJHBase()
 {
 	int nSize(m_aItem.GetSize());
 	CString strtype;
@@ -15,7 +15,7 @@ WVBase::~WVBase()
 
 	for (int i = 0; i < nSize; ++i)
 	{
-		WVBase* pItem = m_aItem.GetAt(i);
+		LJHBase* pItem = m_aItem.GetAt(i);
 
 		switch (pItem->m_nType)
 		{
