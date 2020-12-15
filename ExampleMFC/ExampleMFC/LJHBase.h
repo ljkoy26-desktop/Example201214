@@ -3,7 +3,7 @@ class LJHBase
 {
 public:
 
-	enum { BASE = 0, A = 1, B, C, D };
+	enum EM_TYPE{ BASE = 0, A = 1, B, C, D };
 	int m_nType;
 	CArray<LJHBase*, LJHBase*> m_aItem;
 	

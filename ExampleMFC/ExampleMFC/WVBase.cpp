@@ -20,10 +20,10 @@ LJHBase::~LJHBase()
 		switch (pItem->m_nType)
 		{
 		case 0:			strtype = _T("BASE");		break;
-		case 1:			strtype = _T("A	");		break;
-		case 2:			strtype = _T("B	");		break;
-		case 3:			strtype = _T("C	");		break;
-		case 4:			strtype = _T("D	");		break;
+		case 1:			strtype = _T("A");		break;
+		case 2:			strtype = _T("B");		break;
+		case 3:			strtype = _T("C");		break;
+		case 4:			strtype = _T("D");		break;
 		default:		strtype.Format(_T("%d"), pItem->m_nType); break;
 		}
 
