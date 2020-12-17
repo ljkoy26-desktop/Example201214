@@ -73,6 +73,7 @@ CExampleMFCDlg::CExampleMFCDlg(CWnd* pParent /*=NULL*/)
 void CExampleMFCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON1, m_ctrlButton);
 }
 
 BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
@@ -173,8 +174,7 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 	/* 객체가 정상적으로 소멸되면서, 
 		 a->b->c->d 의 순서로 소멸되고 메모리릭이 없으면 성공!
 	*/
-
-
+	
 	LJHChildA* pa = new LJHChildA; // 리스너
 	LJHChildB* pb = new LJHChildB; // 디스크립션 리스트
 	LJHChildC* pc = new LJHChildC; // 디스크립션
@@ -193,7 +193,8 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 				pc 가 여러개 있을경우나, 순서가 뒤죽박죽이면 조금 결과가 달라짐...
 				노트북에서 출력 테스트 완료 20.12.15
 			*/
-			LJHBase* pItem = pa->m_aItem.ElementAt(i);
+			//LJHBase* pItem = pa->m_aItem.ElementAt(i); // GetAt과 동일한 결과
+			LJHBase* pItem = pa->m_aItem.GetAt(i);
 			pa->m_aItem.RemoveAt(i);
 			pa->m_aItem.Add(pb);
 			pb->m_aItem.Add(pItem);
@@ -201,5 +202,4 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 		}
 	}
 	delete pa;
-
 }
