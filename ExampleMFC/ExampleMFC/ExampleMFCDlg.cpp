@@ -7,15 +7,13 @@
 #include "ExampleMFCDlg.h"
 #include "afxdialogex.h"
 
-
-//#include "LJHBase.h"
-
 #include "LJHChildA.h"
 #include "LJHChildB.h"
 #include "LJHChildC.h"
 #include "LJHChildD.h"
 
-//class LJHBase;
+#include "unzip.h"
+#include "zip.h"
 
 class LJHChildA;
 class LJHChildB;
@@ -81,6 +79,8 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CExampleMFCDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CExampleMFCDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CExampleMFCDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -202,4 +202,73 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 		}
 	}
 	delete pa;
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton2() // ZIP
+{
+	HZIP hz;
+	ZRESULT zr;
+	CString strPathZip = _T("D:\\ziptest\\test.zip");
+	CString strPathIni = _T("D:\\ziptest\\test.ini");
+
+	//D:\ZIP\ 경로에 test.zip이란 파일을 생성한다.
+
+	CreateDirectory(_T("D:\\ZIP"), NULL); // 1 : 
+	hz = CreateZip(strPathZip, _T("tiger"));  // 1 : path , 2 : password
+	
+	//zip파일 생성 실패시 처리
+	if (hz == 0)
+	{
+		AfxMessageBox("Error: Failed to create Zip");
+		return;
+	}
+
+	int i(0), nLen(0);
+	CString strTmp(_T("")), strTmpPath(_T("")), strTmpName(_T(""));
+
+	//INI 파일을 활용하여 압축할 파일 정보를 저장한다.
+	//D드라이브에 test.ini란 파일이름으로 저장한다.
+	//FTP란 섹션에 Total 키에는 파일 갯수, 그 이후부터는 순번대로 파일 이름을 넣는다.
+	//INI파일은 D드라이브에 test.ini란 파일이름으로 저장한다.
+	::WritePrivateProfileString("FTP", "Total", "1", strPathIni);
+	::WritePrivateProfileString("FTP", "1", "D:\\ziptest\\test.txt", strPathIni);
+
+	//ZipAdd 명령으로 D:\test.ini를 idx.ini로 바꾸어 D:\ZIP\test.zip 파일에 추가한다.
+	zr = ZipAdd(hz, "idx.ini", strPathIni); //압축할 파일 명"idx.ini"
+
+	//ZipAdd 명령 실패시 처리  
+	if (zr != ZR_OK)
+	{
+		AfxMessageBox("Error: Failed to add Zip");
+		zr = CloseZip(hz);
+		return;
+	}
+
+	//ZipAdd 명령으로 다른 파일을 추가한다.
+	{
+		strTmpName = "test.txt";      //Zip파일에 저장할 파일이름
+		strTmpPath = "D:\\ziptest\\test.txt";  //압축할 파일 위치
+		zr = ZipAdd(hz, strTmpName, strTmpPath);
+
+		if (zr != ZR_OK)
+		{
+			AfxMessageBox("Error: Failed to add Zip22");
+			zr = CloseZip(hz);
+			return;
+		}
+	}
+	zr = CloseZip(hz);
+
+
+
+
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton3() // unzip
+{
+
+
+
 }
