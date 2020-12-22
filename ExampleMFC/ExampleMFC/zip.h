@@ -1,6 +1,17 @@
 #ifndef _zip_H
 #define _zip_H
-
+//
+#ifdef ZIP_STD
+#include <time.h>
+#define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+#ifndef MAX_PATH
+#define MAX_PATH 1024
+#endif
+typedef unsigned long DWORD;
+typedef char TCHAR;
+typedef FILE* HANDLE;
+typedef time_t FILETIME;
+#endif
 
 // ZIP functions -- for creating zip files
 // This file is a repackaged form of the Info-Zip source code available

@@ -1,5 +1,17 @@
 #ifndef _unzip_H
 #define _unzip_H
+//
+#ifdef ZIP_STD
+#include <time.h>
+#define DECLARE_HANDLE(name) struct name##__ { int unused; }; typedef struct name##__ *name
+#ifndef MAX_PATH
+#define MAX_PATH 1024
+#endif
+typedef unsigned long DWORD;
+typedef char TCHAR;
+typedef FILE* HANDLE;
+typedef time_t FILETIME;
+#endif
 
 // UNZIPPING functions -- for unzipping.
 // This file is a repackaged form of extracts from the zlib code available

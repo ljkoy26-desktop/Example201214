@@ -207,62 +207,94 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 
 void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 {
-	HZIP hz;
-	ZRESULT zr;
-	CString strPathZip = _T("D:\\ziptest\\test.zip");
-	CString strPathIni = _T("D:\\ziptest\\test.ini");
-
-	//D:\ZIP\ 경로에 test.zip이란 파일을 생성한다.
-
-	CreateDirectory(_T("D:\\ZIP"), NULL); // 1 : 
-	hz = CreateZip(strPathZip, _T("tiger"));  // 1 : path , 2 : password
+		//	// 다음은 결과 코드입니다.
+		//    #define ZR_OK 0x00000000 // nb. 의사 코드 zr-recent는 반환되지 않습니다.
+		//    #define ZR_RECENT 0x00000001 //하지만 FormatZipMessage에 전달할 수 있습니다.
+		//    	// 다음은 일반적인 시스템 관련 항목 (예 : 파일을 열 수 없음)
+		//    #define ZR_GENMASK 0x0000FF00
+		//    #define ZR_NODUPH 0x00000100 // 핸들을 복제 할 수 없습니다.
+		//    #define ZR_NOFILE 0x00000200 // 파일을 만들거나 열 수 없습니다.
+		//    #define ZR_NOALLOC 0x00000300 // 일부 리소스 할당 실패
+		//    #define ZR_WRITE 0x00000400 // 파일에 쓰는 일반적인 오류
+		//    #define ZR_NOTFOUND 0x00000500 // zip에서 해당 파일을 찾을 수 없습니다.
+		//    #define ZR_MORE 0x00000600 // 압축을 풀 데이터가 더 있습니다.
+		//    #define ZR_CORRUPT 0x00000700 // zip 파일이 손상되었거나 zip 파일이 아닙니다.
+		//    #define ZR_READ 0x00000800 // 파일 읽기 일반 오류
+		//    	// 다음은 호출자의 실수로 인한 것입니다.
+		//    #define ZR_CALLERMASK 0x00FF0000
+		//    #define ZR_ARGS 0x00010000 // 인수에 대한 일반적인 실수
+		//    #define ZR_NOTMMAP 0x00020000 // ZipGetMemory를 시도했지만 mmap zip 파일에서만 작동합니다.
+		//    #define ZR_MEMSIZE 0x00030000 // 메모리 크기가 너무 작습니다.
+		//    #define ZR_FAILED 0x00040000 //이 함수를 호출했을 때 이미 실패했습니다.
+		//    #define ZR_ENDED 0x00050000 // zip 생성이 이미 종료되었습니다.
+		//    #define ZR_MISSIZE 0x00060000 // 표시된 입력 파일 크기가 잘못되었습니다.
+		//    #define ZR_PARTIALUNZ 0x00070000 // 파일이 이미 부분적으로 압축 해제되었습니다.
+		//    #define ZR_ZMODE 0x00080000 // zip 생성 / 열기 혼합 시도
+		//    	// 다음은 zip 라이브러리 자체의 버그에서 비롯됩니다.
+		//    #define ZR_BUGMASK 0xFF000000
+		//    #define ZR_NOTINITED 0x01000000 // 초기화가 작동하지 않았습니다.
+		//    #define ZR_SEEK 0x02000000 // 검색 할 수없는 파일을 찾으려고합니다.
+		//    #define ZR_NOCHANGE 0x04000000 // 저장에 대한 마음이 바뀌었지만 허용되지 않음
+		//    #define ZR_FLATE 0x05000000 // 디 / 인플레이션 코드의 내부 오류
 	
+	HZIP hZip;
+	ZRESULT zResult;
+
+	// 바탕 화면의 경로로 테스트 진행
+	TCHAR szDesktop[MAX_PATH];
+	SHGetSpecialFolderPath(NULL, szDesktop, CSIDL_DESKTOP, FALSE);
+
+	CString strPathZip = (CString)szDesktop;
+	CString strPathIni = (CString)szDesktop;
+	CString strPathTxt = (CString)szDesktop;
+	CString strTargetFile = (CString)szDesktop;
+
+	strPathZip += _T("\\알집.zip");
+	strPathIni += _T("\\이닛.ini");
+	strPathTxt += _T("\\텍스트.txt");
+	strTargetFile += _T("\\Orange FAQ 정리.xlsx");
+
+	// 바탕화면 경로에 알집 파일을 생성한다.
+	CreateDirectory(szDesktop, NULL);
+	//hZip = CreateZip(strPathZip, _T("tiger"));  // 1 : path , 2 : password 
+	hZip = CreateZip(strPathZip, NULL);
+
 	//zip파일 생성 실패시 처리
-	if (hz == 0)
+	if (hZip == NULL)
 	{
 		AfxMessageBox("Error: Failed to create Zip");
 		return;
 	}
 
-	int i(0), nLen(0);
-	CString strTmp(_T("")), strTmpPath(_T("")), strTmpName(_T(""));
+	// 아래와 같이 ini 파일이 생성된다. (WritePrivateProfileString)
+	//[생성경로]
+	//킷값 = C:\Users\Warevalley\Desktop\텍스트.txt
+	// 3 : 경로
+	// 4 : 생성할 파일
+	// 반드시 필요한 내용은 아닙니다. (ini)파일에 관한 샘플임
+	//bool bReturn = ::WritePrivateProfileString(_T("생성경로"), _T("킷값"), szDesktop, strPathTxt); 
 
-	//INI 파일을 활용하여 압축할 파일 정보를 저장한다.
-	//D드라이브에 test.ini란 파일이름으로 저장한다.
-	//FTP란 섹션에 Total 키에는 파일 갯수, 그 이후부터는 순번대로 파일 이름을 넣는다.
-	//INI파일은 D드라이브에 test.ini란 파일이름으로 저장한다.
-	::WritePrivateProfileString("FTP", "Total", "1", strPathIni);
-	::WritePrivateProfileString("FTP", "1", "D:\\ziptest\\test.txt", strPathIni);
+	// strPathIni 이 파일의 내용이 압축된다. 	
+	// 추가하기 전에 해당경로에 파일이 존재해야 한다.
+	// 3번 매개변수 위치에 파일이 존재하지 않으면 에러반환 -> 만들어진 excel 파일 및 데이터 Src를 구해 사용해볼 예정
 
-	//ZipAdd 명령으로 D:\test.ini를 idx.ini로 바꾸어 D:\ZIP\test.zip 파일에 추가한다.
-	zr = ZipAdd(hz, "idx.ini", strPathIni); //압축할 파일 명"idx.ini"
+
+	CString strSRC(_T("안녕하세요 이재현 입니다"));
+	zResult = ZipAdd(hZip, _T("테스트.txt"), (void*)(LPCTSTR)strSRC, strSRC.GetLength());
+
+	//zResult = ZipAdd(hZip, _T("테스트.txt"), (void*)fp, );
+	//zResult = ZipAdd(hZip, _T("압축할 내용물.ini"), strTargetFile); // 2 : 압축할 파일명.포맷 ,  3 : 압축할 파일
+	//zResult = ZipAdd(hZip, _T("테스트.txt"), strTargetFile);
+	//zResult = ZipAdd(hZip, _T("엑셀.xlsx"), strTargetFile);
 
 	//ZipAdd 명령 실패시 처리  
-	if (zr != ZR_OK)
+	if (zResult != ZR_OK)
 	{
 		AfxMessageBox("Error: Failed to add Zip");
-		zr = CloseZip(hz);
+		zResult = CloseZip(hZip);
 		return;
 	}
-
-	//ZipAdd 명령으로 다른 파일을 추가한다.
-	{
-		strTmpName = "test.txt";      //Zip파일에 저장할 파일이름
-		strTmpPath = "D:\\ziptest\\test.txt";  //압축할 파일 위치
-		zr = ZipAdd(hz, strTmpName, strTmpPath);
-
-		if (zr != ZR_OK)
-		{
-			AfxMessageBox("Error: Failed to add Zip22");
-			zr = CloseZip(hz);
-			return;
-		}
-	}
-	zr = CloseZip(hz);
-
-
-
-
+	zResult = CloseZip(hZip);
 }
 
 
