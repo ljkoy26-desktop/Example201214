@@ -1,3 +1,5 @@
+#pragma  _CRT_NON_CONFORMING_SWPRINTFS
+#include "stdafx.h"
 #ifdef ZIP_STD
 #include <stdio.h>
 #include <string.h>
@@ -4164,8 +4166,8 @@ ZRESULT TUnzip::Unzip(int index,void *dst,unsigned int len,DWORD flags)
     const TCHAR *name=ufn; const TCHAR *c=name; while (*c!=0) {if (*c=='/' || *c=='\\') name=c+1; c++;}
     TCHAR dir[MAX_PATH]; _tcsncpy(dir,ufn,MAX_PATH); if (name==ufn) *dir=0; else dir[name-ufn]=0;
     bool isabsolute = (dir[0]=='/' || dir[0]=='\\' || (dir[0]!=0 && dir[1]==':'));
-    if (isabsolute) {_tsprintf(fn,_T("%s%s"),dir,name); EnsureDirectory(0,dir);}
-    else {_tsprintf(fn,_T("%s%s%s"),rootdir,dir,name); EnsureDirectory(rootdir,dir);}
+	if (isabsolute) { _stprintf_s(fn, _T("%s%s"), dir, name); EnsureDirectory(0, dir); }
+    else { _stprintf_s(fn,_T("%s%s%s"),rootdir,dir,name); EnsureDirectory(rootdir,dir);}
     //
 #ifdef ZIP_STD
     h = fopen(fn,"wb");

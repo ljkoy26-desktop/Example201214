@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #ifdef ZIP_STD
 #include <stdio.h>
 #include <stdlib.h>
