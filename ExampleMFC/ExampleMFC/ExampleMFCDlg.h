@@ -5,6 +5,8 @@
 #pragma once
 #include "afxwin.h"
 
+#include "unzip.h"
+#include "zip.h"
 
 // CExampleMFCDlg 대화 상자
 class CExampleMFCDlg : public CDialogEx
@@ -25,7 +27,7 @@ public:
 // 구현입니다.
 protected:
 	HICON m_hIcon;
-
+	HZIP m_hZip;
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -37,4 +39,7 @@ public:
 	CButton m_ctrlButton;
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
+
+	CString GetZipErrorMsg(ZRESULT zResult);
+	BOOL AddFile(CString strFileName, CString strTargetPath);
 };

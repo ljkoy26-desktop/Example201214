@@ -12,9 +12,6 @@
 #include "LJHChildC.h"
 #include "LJHChildD.h"
 
-#include "unzip.h"
-#include "zip.h"
-
 class LJHChildA;
 class LJHChildB;
 class LJHChildC;
@@ -207,62 +204,91 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 
 void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 {
-	HZIP hZip;
+ // ctrl + R 로 변수 및 함수명 일괄 변경
+ // ctrl + - + 로 이전 이후 호출 위치 검색할수 있지만, 어떻게 쓰는지는 아직 잘 몰름 (좋은 기능인것 같다 )
+ //https://www.clien.net/service/board/lecture/13375134
+
+	
 	ZRESULT zResult;
 
-	// 바탕 화면의 경로로 테스트 진행
-	TCHAR szDesktop[MAX_PATH];
-	//CString szDesktop; // 이걸로 하면 이상하게 패스를 못얻어옴
-	SHGetSpecialFolderPath(NULL, (TCHAR*)(LPCTSTR)szDesktop, CSIDL_DESKTOP, FALSE);
+	// 하위 경로를 깃허브 바로위 디렉토리 까지 구하기 위해 호출한다 ( D:\GitHub\Example201214 ) 최종경로
+	TCHAR szFolder[MAX_PATH];
+	GetModuleFileName(NULL, szFolder, MAX_PATH); // D:\GitHub\Example201214\ExampleMFC\Debug\ExampleMFC.exe 실행 경로 반환
+	PathRemoveFileSpec(szFolder);
+	PathRemoveFileSpec(szFolder);
+	PathRemoveFileSpec(szFolder);
+	CString strFolder(szFolder);
+	CString strZipPath(strFolder);
 
-	CString strPathZip = (CString)szDesktop;
-	CString strTargetFile = (CString)szDesktop;
+	CString strTarget(_T("테스트.xlsx"));
+	CString strTarget2(_T("테스트.txt"));
+	CString strTargetPath(strFolder);
 
+	CString strRes(_T(""));
 #ifdef UNICODE
 	strPathZip += _T("\\테스트 알집(유니코드).zip");
 #else 
-	strPathZip += _T("\\테스트 알집(멀티바이트).zip");
+	strZipPath += _T("\\테스트 알집(멀티바이트).zip");
 #endif
-	strTargetFile += _T("\\Orange FAQ 정리.xlsx");
-
 	// 바탕화면 경로에 알집 파일을 생성한다.
-	BOOL bReturn = CreateDirectory(szDesktop, NULL);
-	//hZip = CreateZip(strPathZip, _T("tiger"));  // 1 : path , 2 : password 
-	hZip = CreateZip(strPathZip, NULL);
+	m_hZip = CreateZip(strZipPath, NULL); // 2번쨰 인자는 패스워드
 
-	//zip파일 생성 실패시 처리
-	if (hZip == NULL)
+	if (m_hZip == NULL)
 	{
 		AfxMessageBox(_T("Error: Failed to create Zip"));
 		return;
-	}
-	CString strSRC(_T("안녕하세요 이재현 입니다"));
-	//TCHAR* sz = strSRC.GetBuffer();
-	//zResult = ZipAdd(hZip, _T("테스트.txt"), (void*)(LPSTR)(LPCTSTR)strSRC, strSRC.GetLength() * sizeof(TCHAR));
-	void *pData = NULL;
-	memcpy(pData, (void*)(LPCTSTR)strSRC, strSRC.GetLength());	
-	//szResult = ZipAdd(hZip, _T("테스트.txt"), (void*)(LPCTSTR)strSRC, strSRC.GetLength() * sizeof(TCHAR));
-	zResult = ZipAdd(hZip, _T("테스트.txt"), pData, strSRC.GetLength() * sizeof(TCHAR));
-	
-	//zResult = ZipAdd(hZip, _T("테스트.txt"), (void*)fp, );
-	//zResult = ZipAdd(hZip, _T("압축할 내용물.ini"), strTargetFile); // 2 : 압축할 파일명.포맷 ,  3 : 압축할 파일
-	//zResult = ZipAdd(hZip, _T("테스트.txt"), strTargetFile);
-	//zResult = ZipAdd(hZip, _T("엑셀.xlsx"), strTargetFile);
-
-	//ZipAdd 명령 실패시 처리  
-	if (zResult != ZR_OK)
+	}	
+	strTargetPath = strFolder + _T("\\") + strTarget;
+	zResult = ZipAdd(m_hZip, strTarget, strTargetPath);
+	if (ZR_OK != zResult)
 	{
-		AfxMessageBox(_T("Error: Failed to add Zip"));
-		zResult = CloseZip(hZip);
+		strRes = GetZipErrorMsg(zResult);
+		AfxMessageBox(strRes);
 		return;
 	}
-	zResult = CloseZip(hZip);
+	strTargetPath = strFolder + _T("\\") + strTarget2;
+	
+	AddFile(strTarget2, strTargetPath);
+
+	//zResult = ZipAdd(m_hZip, strTarget2, strTargetPath);
+	//if (ZR_OK != zResult)
+	//{
+	//	strRes = GetZipErrorMsg(zResult);
+	//	AfxMessageBox(strRes);
+	//	return;
+	//}
+
+	/* fn : ZipAdd */
+	// 1 : zip 객체
+	// 2 : 생성하려는 파일명 3번으로 추가한 파일의 패스명
+	// 3 : 추가하려는 파일의 풀 Path명 
+
+	GetZipErrorMsg(CloseZip(m_hZip));
+}
+CString CExampleMFCDlg::GetZipErrorMsg(ZRESULT zResult)
+{
+	CString sReturn(_T(""));
+
+	TCHAR szMsg[256];
+	FormatZipMessage(zResult, szMsg, 256);
+	sReturn = szMsg;
+	return sReturn;
+}
+BOOL CExampleMFCDlg::AddFile(CString strFileName, CString strTargetPath)
+{
+	BOOL bReturn(true);
+	ZRESULT zResult = ZipAdd(m_hZip, strFileName, strTargetPath);
+	if (ZR_OK != zResult)
+	{	
+		AfxMessageBox(GetZipErrorMsg(zResult));
+		bReturn = false;
+		return;
+	}
+
+	return bReturn;
 }
 
 
 void CExampleMFCDlg::OnBnClickedButton3() // unzip
 {
-
-
-
 }
