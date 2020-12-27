@@ -214,12 +214,14 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 	// 하위 경로를 깃허브 바로위 디렉토리 까지 구하기 위해 호출한다 ( D:\GitHub\Example201214 ) 최종경로
 	TCHAR szFolder[MAX_PATH];
 	GetModuleFileName(NULL, szFolder, MAX_PATH); // D:\GitHub\Example201214\ExampleMFC\Debug\ExampleMFC.exe 실행 경로 반환
+
 	PathRemoveFileSpec(szFolder);
 	PathRemoveFileSpec(szFolder);
 	PathRemoveFileSpec(szFolder);
 	CString strFolder(szFolder);
 	CString strZipPath(strFolder);
-
+	CTime time = GetCurrentTime();
+	TRACE(_T("%d : %d : %d\n"), time.GetHour(), time.GetMinute(), time.GetSecond());
 	CString strTarget(_T("테스트.xlsx"));
 	CString strTarget2(_T("테스트.txt"));
 
@@ -228,7 +230,7 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 
 	CString strRes(_T(""));
 #ifdef UNICODE
-	strPathZip += _T("\\테스트 알집(유니코드).zip");
+	strZipPath += _T("\\테스트 알집(유니코드).zip");
 #else 
 	strZipPath += _T("\\테스트 알집(멀티바이트).zip");
 #endif
@@ -240,6 +242,8 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 		AfxMessageBox(_T("Error: Failed to create Zip"));
 		return;
 	}	
+	
+	// 한글 파일명에 대한 처리 필요 ( 경로에 한글에 들어가도 문제될수 있다 )
 	strTargetPath = strFolder + _T("\\") + strTarget;
 	zResult = ZipAdd(m_hZip, strTarget, strTargetPath);
 	if (ZR_OK != zResult)
@@ -248,17 +252,15 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 		AfxMessageBox(strRes);
 		return;
 	}
-	strTargetPath2 = strFolder + _T("\\") + strTarget2;
-	
-	AddFile(strTarget2, strTargetPath2);
 
-	//zResult = ZipAdd(m_hZip, strTarget2, strTargetPath);
-	//if (ZR_OK != zResult)
-	//{
-	//	strRes = GetZipErrorMsg(zResult);
-	//	AfxMessageBox(strRes);
-	//	return;
-	//}
+	strTargetPath2 = strFolder + _T("\\") + strTarget2;
+	zResult = ZipAdd(m_hZip, strTarget2,strTargetPath2);
+	if (ZR_OK != zResult)
+	{
+		strRes = GetZipErrorMsg(zResult);
+		AfxMessageBox(strRes);
+		return;
+	}
 
 	/* fn : ZipAdd */
 	// 1 : zip 객체
@@ -266,6 +268,12 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 	// 3 : 추가하려는 파일의 풀 Path명 
 
 	GetZipErrorMsg(CloseZip(m_hZip));
+	time = GetCurrentTime();
+	TRACE(_T("%d : %d : %d\n"), time.GetHour(), time.GetMinute(), time.GetSecond());
+
+
+	//if (DeleteFile(strTargetPath2) == TRUE)
+	//	AfxMessageBox(_T("삭제함"));
 }
 CString CExampleMFCDlg::GetZipErrorMsg(ZRESULT zResult)
 {
@@ -291,10 +299,6 @@ BOOL CExampleMFCDlg::AddFile(CString strFileName, CString strTargetPath)
 
 void CExampleMFCDlg::OnBnClickedButton3() // unzip
 {
-
-	CString test = "abcde";
-	CString str;
-	str = test.Mid(10);
 }
 
 
