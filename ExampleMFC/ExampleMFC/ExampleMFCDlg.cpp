@@ -222,7 +222,9 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 
 	CString strTarget(_T("테스트.xlsx"));
 	CString strTarget2(_T("테스트.txt"));
+
 	CString strTargetPath(strFolder);
+	CString strTargetPath2(strFolder);
 
 	CString strRes(_T(""));
 #ifdef UNICODE
@@ -232,7 +234,7 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 #endif
 	// 바탕화면 경로에 알집 파일을 생성한다.
 	m_hZip = CreateZip(strZipPath, NULL); // 2번쨰 인자는 패스워드
-
+	
 	if (m_hZip == NULL)
 	{
 		AfxMessageBox(_T("Error: Failed to create Zip"));
@@ -246,9 +248,9 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 		AfxMessageBox(strRes);
 		return;
 	}
-	strTargetPath = strFolder + _T("\\") + strTarget2;
+	strTargetPath2 = strFolder + _T("\\") + strTarget2;
 	
-	AddFile(strTarget2, strTargetPath);
+	AddFile(strTarget2, strTargetPath2);
 
 	//zResult = ZipAdd(m_hZip, strTarget2, strTargetPath);
 	//if (ZR_OK != zResult)
@@ -282,13 +284,32 @@ BOOL CExampleMFCDlg::AddFile(CString strFileName, CString strTargetPath)
 	{	
 		AfxMessageBox(GetZipErrorMsg(zResult));
 		bReturn = false;
-		return;
 	}
-
 	return bReturn;
 }
 
 
 void CExampleMFCDlg::OnBnClickedButton3() // unzip
 {
+
+	CString test = "abcde";
+	CString str;
+	str = test.Mid(10);
 }
+
+
+
+
+//Data::Data() // 생성자 매개변수가 없는 기본 생성자 입니다.
+//{
+//}
+//
+//Data::Data(int _width, int _height) // 기본 생성자가 아닌 2개의 매개변수를 갖는 생성자 입니다.
+//{
+//	setData(_width, _height);
+//}
+//
+//Shape::Shape(Data elements)
+//{
+//}
+//

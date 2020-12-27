@@ -43,3 +43,30 @@ public:
 	CString GetZipErrorMsg(ZRESULT zResult);
 	BOOL AddFile(CString strFileName, CString strTargetPath);
 };
+
+//class Data
+//{
+//private:
+//	int width, height;
+//public:
+//	Data();
+//	Data(int _width, int _height);
+//	void setData(int _width, int _height);
+//	int getWidth();
+//	int getHeight();
+//	void displayData();
+//};
+//
+//
+//
+//class Shape
+//{
+//private:
+////	Data elements; // ¾Æ·¡
+//public:
+//	Shape(Data elements);
+//	int computeTriangle();
+//	int computeRectangle();
+//	void displayArea();
+//};
+//
