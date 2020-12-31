@@ -16,5 +16,3 @@
 *.aps
 ExampleMFC/Debug/ExampleMFC.dll
 ExampleMFC/Debug/ExampleMFC.lib
-Example201214\ExampleMFC
-ExampleMFC/.vs/ExampleMFC/v14/**
