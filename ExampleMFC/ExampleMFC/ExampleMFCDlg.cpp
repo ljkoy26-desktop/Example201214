@@ -204,8 +204,8 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 
 void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 {
- // ctrl + R 로 변수 및 함수명 일괄 변경
- // ctrl + - + 로 이전 이후 호출 위치 검색할수 있지만, 어떻게 쓰는지는 아직 잘 몰름 (좋은 기능인것 같다 )
+ // ctrl + R 로 변수 및 함수명 일괄 변경 -> 좋은기능임
+ // ctrl + - + 로 이전 이후 호출 위치 검색할수 있지만, 어떻게 쓰는지는 아직 잘 몰름 (좋은 기능인것 같다 ) -> 아닌거같음
  //https://www.clien.net/service/board/lecture/13375134
 
 	
@@ -218,6 +218,7 @@ void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 	PathRemoveFileSpec(szFolder);
 	PathRemoveFileSpec(szFolder);
 	PathRemoveFileSpec(szFolder);
+
 	CString strFolder(szFolder);
 	CString strZipPath(strFolder);
 	CTime time = GetCurrentTime();
@@ -299,6 +300,20 @@ BOOL CExampleMFCDlg::AddFile(CString strFileName, CString strTargetPath)
 
 void CExampleMFCDlg::OnBnClickedButton3() // unzip
 {
+	BROWSEINFO BrInfo;
+	TCHAR szBuffer[512];                                      // 경로저장 버퍼 
+
+	::ZeroMemory(&BrInfo, sizeof(BROWSEINFO));
+	::ZeroMemory(szBuffer, 512);
+
+	BrInfo.hwndOwner = GetSafeHwnd();
+	BrInfo.lpszTitle = _T("파일이 저장될 폴더를 선택하세요");
+	BrInfo.ulFlags = BIF_NEWDIALOGSTYLE | BIF_EDITBOX | BIF_RETURNONLYFSDIRS;
+
+	LPITEMIDLIST pItemIdList = ::SHBrowseForFolder(&BrInfo); // 창의 띄워지는곳
+
+	::SHGetPathFromIDList(pItemIdList, szBuffer);
+	AfxMessageBox(szBuffer);
 }
 
 
