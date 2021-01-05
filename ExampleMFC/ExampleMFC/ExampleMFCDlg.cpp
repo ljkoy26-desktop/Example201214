@@ -12,6 +12,7 @@
 #include "LJHChildC.h"
 #include "LJHChildD.h"
 
+
 class LJHChildA;
 class LJHChildB;
 class LJHChildC;
@@ -78,15 +79,25 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CExampleMFCDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CExampleMFCDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CExampleMFCDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CExampleMFCDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CExampleMFCDlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
 // CExampleMFCDlg 메시지 처리기
-
+void CExampleMFCDlg::OnDestroy()
+{
+	delete m_pView;
+}
 BOOL CExampleMFCDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+
+	m_pView = new CExampleView;
+	m_pView->Create(NULL, _T(""), WS_CHILD | WS_BORDER | WS_VISIBLE, CRect(500,500, 1200, 700), this, 50001);
+
+	m_pView->OnInitialUpdate();
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
 
 	// IDM_ABOUTBOX는 시스템 명령 범위에 있어야 합니다.
@@ -332,3 +343,49 @@ void CExampleMFCDlg::OnBnClickedButton3() // unzip
 //{
 //}
 //
+
+
+void CExampleMFCDlg::OnBnClickedButton4()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton5() // 스레드 테스트
+{
+	// 작업자 스레드
+
+	UINT n = 600;
+
+	// ** 완전 중요
+
+	// 스레드를 사용한경우!
+	AfxBeginThread(ThreadFunc, (LPVOID)n);
+
+	// 이거는 스레드를 사용하지 않은경우!
+	//ThreadFunc((LPVOID)n);
+
+}
+UINT CExampleMFCDlg::ThreadFunc(LPVOID pParam)
+{
+
+	UINT n = (UINT)pParam;
+
+
+	UINT sum = 0;
+	for (UINT i = 1; i < n; ++i)
+	{
+		// 스레드로 동작하는 것을 확인하기 위해서
+		// 0.01초간 대기 시간을 둔다.
+
+		sum += i;
+		Sleep(10);
+	}
+
+	//계산결과 출력
+	CString str;
+	str.Format(_T("계산 결과 = %d"), sum);
+	AfxMessageBox(str);
+
+	return 0;
+}
