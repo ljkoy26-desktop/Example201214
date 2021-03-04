@@ -12,7 +12,6 @@
 #include "LJHChildC.h"
 #include "LJHChildD.h"
 
-
 class LJHChildA;
 class LJHChildB;
 class LJHChildC;
