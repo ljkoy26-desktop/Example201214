@@ -11,6 +11,11 @@
 #include "LJHChildB.h"
 #include "LJHChildC.h"
 #include "LJHChildD.h"
+#include <sddl.h>
+
+#include "LamdaExpr.h"
+#include <iostream>
+#include <vector>
 
 class LJHChildA;
 class LJHChildB;
@@ -80,6 +85,10 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CExampleMFCDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CExampleMFCDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CExampleMFCDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CExampleMFCDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CExampleMFCDlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &CExampleMFCDlg::OnBnClickedButton8)
+	ON_BN_CLICKED(IDC_BUTTON9, &CExampleMFCDlg::OnBnClickedButton9)
 END_MESSAGE_MAP()
 
 
@@ -91,8 +100,7 @@ void CExampleMFCDlg::OnDestroy()
 BOOL CExampleMFCDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-
+	
 	m_pView = new CExampleView;
 	m_pView->Create(NULL, _T(""), WS_CHILD | WS_BORDER | WS_VISIBLE, CRect(500,500, 1200, 700), this, 50001);
 
@@ -182,12 +190,10 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 		 a->b->c->d 의 순서로 소멸되고 메모리릭이 없으면 성공!
 	*/
 	
-	LJHChildA* pa = new LJHChildA; // 리스너
-	LJHChildB* pb = new LJHChildB; // 디스크립션 리스트
-	LJHChildC* pc = new LJHChildC; // 디스크립션
-	//LJHChildC* pc1 = new LJHChildC; // 디스크립션
-	//LJHChildC* pc2 = new LJHChildC; // 디스크립션
-	LJHChildD* pd = new LJHChildD; // 
+	LJHChildA* pa = new LJHChildA; 
+	LJHChildB* pb = new LJHChildB; 
+	LJHChildC* pc = new LJHChildC; 
+	LJHChildD* pd = new LJHChildD; 
 	
 	pc->m_aItem.Add(pd);
 	pa->m_aItem.Add(pc); // 리스트는 없는 상태
@@ -209,8 +215,7 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 		}
 	}
 	delete pa;
-}
-
+}	
 
 void CExampleMFCDlg::OnBnClickedButton2() // ZIP
 {
@@ -387,4 +392,140 @@ UINT CExampleMFCDlg::ThreadFunc(LPVOID pParam)
 	AfxMessageBox(str);
 
 	return 0;
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton6() // 스마트 포인터
+{
+}
+void CExampleMFCDlg::OnBnClickedButton7() // 람다 표현식
+{
+	CLamdaExpr lamda;                    // Accumulator 함수 객체 클래스로부터 객체 a를 선언한다.
+	lamda.testLamda();
+}
+
+bool CExampleMFCDlg::GetCurrentLogonUserName(/*[out]*/ LPTSTR& lpszAccountName, /*[out]*/ LPTSTR& lpszReferencedDomainName)
+{
+	HANDLE           hToken = NULL;
+	LPBYTE lpBytes = NULL;
+	PTOKEN_USER  lpTokenUser = NULL;
+	DWORD            dwSize = 0;
+	BOOL             bSuccess;
+
+	// get token handle
+	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
+	{
+		return false;
+	}
+
+	GetTokenInformation
+	(
+		hToken,
+		TokenUser,
+		(LPVOID)NULL,
+		0,
+		&dwSize
+	);
+
+	lpBytes = new BYTE[dwSize];
+	lpTokenUser = (PTOKEN_USER)lpBytes;
+
+	bSuccess = GetTokenInformation
+	(
+		hToken,
+		TokenUser,
+		(LPVOID)lpTokenUser,
+		dwSize,
+		&dwSize
+	);
+
+	CloseHandle(hToken);
+	hToken = NULL;
+	if (!bSuccess)
+	{
+		if (lpBytes)
+		{
+			delete[] lpBytes;
+			lpBytes = NULL;
+		}
+		lpTokenUser = NULL;
+		return false;
+	}
+
+	DWORD   dwSize01 = 0;
+	DWORD   dwSize02 = 0;
+	SID_NAME_USE sid_name_use;
+
+
+	CString strTemp = (LPTSTR)(LPCSTR)(PSID)((lpTokenUser->User).Sid);
+
+	LookupAccountSid(
+		NULL,
+		(PSID)((lpTokenUser->User).Sid),
+		(LPTSTR)lpszAccountName,
+		(LPDWORD)&dwSize01,
+		(LPTSTR)lpszReferencedDomainName,
+		(LPDWORD)&dwSize02,
+		(PSID_NAME_USE)&sid_name_use
+	);
+
+	lpszAccountName = new TCHAR[dwSize01];
+	lpszReferencedDomainName = new TCHAR[dwSize02];
+
+	bSuccess = LookupAccountSid(
+		NULL,
+		(PSID)((lpTokenUser->User).Sid),
+		(LPTSTR)lpszAccountName,
+		(LPDWORD)&dwSize01,
+		(LPTSTR)lpszReferencedDomainName,
+		(LPDWORD)&dwSize02,
+		(PSID_NAME_USE)&sid_name_use
+	);
+
+	delete[] lpBytes;
+	lpBytes = NULL;
+	lpTokenUser = NULL;
+
+	return (bSuccess == TRUE);
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton8() // HKEY_USERS
+{
+	LPTSTR lpszAccountName = NULL;
+	LPTSTR lpszReferencedDomainName = NULL;
+
+	bool bRetTemp2 = GetCurrentLogonUserName(lpszAccountName, lpszReferencedDomainName);
+
+	CString sz;
+	sz.Format(_T("%s / %s"), lpszAccountName, lpszReferencedDomainName);
+	AfxMessageBox(sz);
+
+	if (lpszAccountName)
+	{
+		delete[] lpszAccountName;
+		lpszAccountName = NULL;
+	}
+
+	if (lpszReferencedDomainName)
+	{
+		delete[] lpszReferencedDomainName;
+		lpszReferencedDomainName = NULL;
+	}	
+}
+
+
+void CExampleMFCDlg::OnBnClickedButton9() // 정적, 동적 바인딩
+{
+	LJHBase obase;
+	LJHChildA child;
+	LJHBase *pbase = new LJHBase;
+	LJHBase &rbase = child;
+
+	int nTest(0);
+	nTest = obase.VirtualTest();				// 정적 바인딩
+	nTest = child.VirtualTest();				// 정적 바인딩
+	nTest = pbase->VirtualTest();				// 동적 바인딩
+	nTest = rbase.VirtualTest();				// 동적 바인딩
+
 }

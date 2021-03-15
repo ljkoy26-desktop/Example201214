@@ -188,6 +188,7 @@
     <ClInclude Include="ExampleMFC.h" />
     <ClInclude Include="ExampleMFCDlg.h" />
     <ClInclude Include="ExampleView.h" />
+    <ClInclude Include="LamdaExpr.h" />
     <ClInclude Include="LJHSyncObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="ExampleMFC.cpp" />
     <ClCompile Include="ExampleMFCDlg.cpp" />
     <ClCompile Include="ExampleView.cpp" />
+    <ClCompile Include="LamdaExpr.cpp" />
     <ClCompile Include="LJHSyncObject.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

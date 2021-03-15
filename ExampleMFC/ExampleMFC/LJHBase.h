@@ -15,5 +15,7 @@ public:
 	
 	LJHBase();
 	virtual ~LJHBase();
+
+	int virtual VirtualTest() { return -1; };
 };
 
