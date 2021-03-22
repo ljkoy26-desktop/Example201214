@@ -2,18 +2,16 @@
 #include <iostream>
 #include <windows.h>
 
-class LJHSyncObject
+class CLJHSyncObject
 {
 public:
 	HANDLE m_hMutex;
 
-
-
-public:
+private:
 	int testMutex();
 	int testCriticalSection();
 
-	LJHSyncObject();
-	~LJHSyncObject();
+	CLJHSyncObject();
+	~CLJHSyncObject();
 };
 

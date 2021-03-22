@@ -1,16 +1,7 @@
-
-// ExampleMFCDlg.h : 헤더 파일
-//
-
 #pragma once
 #include "afxwin.h"
-
-#include "unzip.h"
-#include "zip.h"
-
-
 #include "ExampleView.h"
-// CExampleMFCDlg 대화 상자
+
 class CTestObject
 {
 public:
@@ -19,52 +10,41 @@ public:
 
 class CExampleMFCDlg : public CDialogEx
 {
-// 생성입니다.
 public:
-	CExampleMFCDlg(CWnd* pParent = NULL);	// 표준 생성자입니다.
+	CExampleMFCDlg(CWnd* pParent = NULL);
 
-// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_EXAMPLEMFC_DIALOG };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
+	virtual void DoDataExchange(CDataExchange* pDX);
 
-	BOOL mIsOpened;
 
-// 구현입니다.
 protected:
-	
-	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();	
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-public:
-	
+
+protected:	
 	HICON m_hIcon;
-	HZIP m_hZip;
 	CExampleView* m_pView;
 	CButton m_ctrlButton;
 public:
 	virtual void OnDestroy();
-	afx_msg void OnBnClickedButton1();
-	afx_msg void OnBnClickedButton2();
-	afx_msg void OnBnClickedButton3();
-	afx_msg void OnBnClickedButton4();
-	afx_msg void OnBnClickedButton5();
 
 	bool GetCurrentLogonUserName(/*[out]*/ LPTSTR& lpszAccountName, /*[out]*/ LPTSTR& lpszReferencedDomainName);
-	BOOL AddFile(CString strFileName, CString strTargetPath);
-	CString GetZipErrorMsg(ZRESULT zResult);
 	static UINT ThreadFunc(LPVOID pParam);
 
 	DECLARE_MESSAGE_MAP()
-	afx_msg void OnBnClickedButton6();
-	afx_msg void OnBnClickedButton7();
-	afx_msg void OnBnClickedButton8();
-	afx_msg void OnBnClickedButton9();
+	afx_msg void OnBnClickedButtonCArrayTest();
+	afx_msg void OnBnClickedButtonFilePathOutput();
+	afx_msg void OnBnClickedButtonThreadTest();
+	afx_msg void OnBnClickedButtonZip();
+	afx_msg void OnBnClickedButtonSmartPointer();
+	afx_msg void OnBnClickedButtonLamdaExpr();
+	afx_msg void OnBnClickedButtonBinding();
 	afx_msg void OnBnClickedButtonCreateDump();
 };
 

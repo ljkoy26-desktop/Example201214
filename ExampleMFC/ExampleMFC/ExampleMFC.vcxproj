@@ -191,6 +191,7 @@
     <ClInclude Include="ExampleView.h" />
     <ClInclude Include="LamdaExpr.h" />
     <ClInclude Include="LJHSyncObject.h" />
+    <ClInclude Include="LJHZip.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="ExampleView.cpp" />
     <ClCompile Include="LamdaExpr.cpp" />
     <ClCompile Include="LJHSyncObject.cpp" />
+    <ClCompile Include="LJHZip.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -216,7 +218,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="unzip.cpp" />
-    <ClCompile Include="WVBase.cpp" />
+    <ClCompile Include="LJHBase.cpp" />
     <ClCompile Include="LJHChildA.cpp" />
     <ClCompile Include="LJHChildB.cpp" />
     <ClCompile Include="LJHChildC.cpp" />

@@ -11,22 +11,22 @@
 #include "LJHChildB.h"
 #include "LJHChildC.h"
 #include "LJHChildD.h"
-#include <sddl.h>
+
+#include "LJHZip.h"
 
 #include "LamdaExpr.h"
 #include <iostream>
 #include <vector>
 
-#include "CreateDump.h"
-
 // 덤프를 위한 헤더파일, 정적라이브러리 링크
 #include <DbgHelp.h> 
+#include "CreateDump.h"
 #pragma comment ( lib, "DbgHelp" )
 
-class LJHChildA;
-class LJHChildB;
-class LJHChildC;
-class LJHChildD;
+class CLJHChildA;
+class CLJHChildB;
+class CLJHChildC;
+class CLJHChildD;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,12 +40,12 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 // 구현입니다.
@@ -86,15 +86,13 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BUTTON1, &CExampleMFCDlg::OnBnClickedButton1)
-	ON_BN_CLICKED(IDC_BUTTON2, &CExampleMFCDlg::OnBnClickedButton2)
-	ON_BN_CLICKED(IDC_BUTTON3, &CExampleMFCDlg::OnBnClickedButton3)
-	ON_BN_CLICKED(IDC_BUTTON4, &CExampleMFCDlg::OnBnClickedButton4)
-	ON_BN_CLICKED(IDC_BUTTON5, &CExampleMFCDlg::OnBnClickedButton5)
-	ON_BN_CLICKED(IDC_BUTTON6, &CExampleMFCDlg::OnBnClickedButton6)
-	ON_BN_CLICKED(IDC_BUTTON7, &CExampleMFCDlg::OnBnClickedButton7)
-	ON_BN_CLICKED(IDC_BUTTON8, &CExampleMFCDlg::OnBnClickedButton8)
-	ON_BN_CLICKED(IDC_BUTTON9, &CExampleMFCDlg::OnBnClickedButton9)
+	ON_BN_CLICKED(IDC_BUTTON1, &CExampleMFCDlg::OnBnClickedButtonCArrayTest)
+	ON_BN_CLICKED(IDC_BUTTON2, &CExampleMFCDlg::OnBnClickedButtonZip)
+	ON_BN_CLICKED(IDC_BUTTON3, &CExampleMFCDlg::OnBnClickedButtonFilePathOutput)
+	ON_BN_CLICKED(IDC_BUTTON5, &CExampleMFCDlg::OnBnClickedButtonThreadTest)
+	ON_BN_CLICKED(IDC_BUTTON6, &CExampleMFCDlg::OnBnClickedButtonSmartPointer)
+	ON_BN_CLICKED(IDC_BUTTON7, &CExampleMFCDlg::OnBnClickedButtonLamdaExpr)
+	ON_BN_CLICKED(IDC_BUTTON9, &CExampleMFCDlg::OnBnClickedButtonBinding)
 	ON_BN_CLICKED(IDC_BUTTON_CREATE_DUMP, &CExampleMFCDlg::OnBnClickedButtonCreateDump)
 END_MESSAGE_MAP()
 
@@ -107,9 +105,9 @@ void CExampleMFCDlg::OnDestroy()
 BOOL CExampleMFCDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	
+
 	m_pView = new CExampleView;
-	m_pView->Create(NULL, _T(""), WS_CHILD | WS_BORDER | WS_VISIBLE, CRect(500,500, 1200, 700), this, 50001);
+	m_pView->Create(NULL, _T(""), WS_CHILD | WS_BORDER | WS_VISIBLE, CRect(500, 500, 1200, 700), this, 50001);
 
 	m_pView->OnInitialUpdate();
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
@@ -132,8 +130,6 @@ BOOL CExampleMFCDlg::OnInitDialog()
 		}
 	}
 
-	// 이 대화 상자의 아이콘을 설정합니다.  응용 프로그램의 주 창이 대화 상자가 아닐 경우에는
-	//  프레임워크가 이 작업을 자동으로 수행합니다.
 	SetIcon(m_hIcon, TRUE);			// 큰 아이콘을 설정합니다.
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
@@ -152,11 +148,6 @@ void CExampleMFCDlg::OnSysCommand(UINT nID, LPARAM lParam)
 		CDialogEx::OnSysCommand(nID, lParam);
 	}
 }
-
-// 대화 상자에 최소화 단추를 추가할 경우 아이콘을 그리려면
-//  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 응용 프로그램의 경우에는
-//  프레임워크에서 이 작업을 자동으로 수행합니다.
-
 void CExampleMFCDlg::OnPaint()
 {
 	if (IsIconic())
@@ -181,40 +172,34 @@ void CExampleMFCDlg::OnPaint()
 		CDialogEx::OnPaint();
 	}
 }
-
-// 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
-//  이 함수를 호출합니다.
 HCURSOR CExampleMFCDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
-
-
-
-void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
+void CExampleMFCDlg::OnBnClickedButtonCArrayTest() // Carray테스트
 {
-	/* 객체가 정상적으로 소멸되면서, 
+	/* 객체가 정상적으로 소멸되면서,
 		 a->b->c->d 의 순서로 소멸되고 메모리릭이 없으면 성공!
 	*/
-	
-	LJHChildA* pa = new LJHChildA; 
-	LJHChildB* pb = new LJHChildB; 
-	LJHChildC* pc = new LJHChildC; 
-	LJHChildD* pd = new LJHChildD; 
-	
+
+	CLJHChildA* pa = new CLJHChildA;
+	CLJHChildB* pb = new CLJHChildB;
+	CLJHChildC* pc = new CLJHChildC;
+	CLJHChildD* pd = new CLJHChildD;
+
 	pc->m_aItem.Add(pd);
 	pa->m_aItem.Add(pc); // 리스트는 없는 상태
-	
+
 	for (int i = 0; pa->m_aItem.GetSize(); ++i)
 	{
-		if (pa->m_aItem.GetAt(i)->m_nType == LJHBase::C)
+		if (pa->m_aItem.GetAt(i)->m_nType == CLJHBase::C)
 		{
-			/* 한개의 케이스 에서는 성공했지만, 
+			/* 한개의 케이스 에서는 성공했지만,
 				pc 가 여러개 있을경우나, 순서가 뒤죽박죽이면 조금 결과가 달라짐...
 				노트북에서 출력 테스트 완료 20.12.15
 			*/
-			//LJHBase* pItem = pa->m_aItem.ElementAt(i); // GetAt과 동일한 결과
-			LJHBase* pItem = pa->m_aItem.GetAt(i);
+			//CLJHBase* pItem = pa->m_aItem.ElementAt(i); // GetAt과 동일한 결과
+			CLJHBase* pItem = pa->m_aItem.GetAt(i);
 			pa->m_aItem.RemoveAt(i);
 			pa->m_aItem.Add(pb);
 			pb->m_aItem.Add(pItem);
@@ -222,105 +207,8 @@ void CExampleMFCDlg::OnBnClickedButton1() // Carray테스트
 		}
 	}
 	delete pa;
-}	
-
-void CExampleMFCDlg::OnBnClickedButton2() // ZIP
-{
- // ctrl + R 로 변수 및 함수명 일괄 변경 -> 좋은기능임
- // ctrl + - + 로 이전 이후 호출 위치 검색할수 있지만, 어떻게 쓰는지는 아직 잘 몰름 (좋은 기능인것 같다 ) -> 아닌거같음
- //https://www.clien.net/service/board/lecture/13375134
-
-	
-	ZRESULT zResult;
-
-	// 하위 경로를 깃허브 바로위 디렉토리 까지 구하기 위해 호출한다 ( D:\GitHub\Example201214 ) 최종경로
-	TCHAR szFolder[MAX_PATH];
-	GetModuleFileName(NULL, szFolder, MAX_PATH); // D:\GitHub\Example201214\ExampleMFC\Debug\ExampleMFC.exe 실행 경로 반환
-
-	PathRemoveFileSpec(szFolder);
-	PathRemoveFileSpec(szFolder);
-	PathRemoveFileSpec(szFolder);
-
-	CString strFolder(szFolder);
-	CString strZipPath(strFolder);
-	CTime time = GetCurrentTime();
-	TRACE(_T("%d : %d : %d\n"), time.GetHour(), time.GetMinute(), time.GetSecond());
-	CString strTarget(_T("테스트.xlsx"));
-	CString strTarget2(_T("테스트.txt"));
-
-	CString strTargetPath(strFolder);
-	CString strTargetPath2(strFolder);
-
-	CString strRes(_T(""));
-#ifdef UNICODE
-	strZipPath += _T("\\테스트 알집(유니코드).zip");
-#else 
-	strZipPath += _T("\\테스트 알집(멀티바이트).zip");
-#endif
-	// 바탕화면 경로에 알집 파일을 생성한다.
-	m_hZip = CreateZip(strZipPath, NULL); // 2번쨰 인자는 패스워드
-	
-	if (m_hZip == NULL)
-	{
-		AfxMessageBox(_T("Error: Failed to create Zip"));
-		return;
-	}	
-	
-	// 한글 파일명에 대한 처리 필요 ( 경로에 한글에 들어가도 문제될수 있다 )
-	strTargetPath = strFolder + _T("\\") + strTarget;
-	zResult = ZipAdd(m_hZip, strTarget, strTargetPath);
-	if (ZR_OK != zResult)
-	{
-		strRes = GetZipErrorMsg(zResult);
-		AfxMessageBox(strRes);
-		return;
-	}
-
-	strTargetPath2 = strFolder + _T("\\") + strTarget2;
-	zResult = ZipAdd(m_hZip, strTarget2,strTargetPath2);
-	if (ZR_OK != zResult)
-	{
-		strRes = GetZipErrorMsg(zResult);
-		AfxMessageBox(strRes);
-		return;
-	}
-
-	/* fn : ZipAdd */
-	// 1 : zip 객체
-	// 2 : 생성하려는 파일명 3번으로 추가한 파일의 패스명
-	// 3 : 추가하려는 파일의 풀 Path명 
-
-	GetZipErrorMsg(CloseZip(m_hZip));
-	time = GetCurrentTime();
-	TRACE(_T("%d : %d : %d\n"), time.GetHour(), time.GetMinute(), time.GetSecond());
-
-
-	//if (DeleteFile(strTargetPath2) == TRUE)
-	//	AfxMessageBox(_T("삭제함"));
 }
-CString CExampleMFCDlg::GetZipErrorMsg(ZRESULT zResult)
-{
-	CString sReturn(_T(""));
-
-	TCHAR szMsg[256];
-	FormatZipMessage(zResult, szMsg, 256);
-	sReturn = szMsg;
-	return sReturn;
-}
-BOOL CExampleMFCDlg::AddFile(CString strFileName, CString strTargetPath)
-{
-	BOOL bReturn(true);
-	ZRESULT zResult = ZipAdd(m_hZip, strFileName, strTargetPath);
-	if (ZR_OK != zResult)
-	{	
-		AfxMessageBox(GetZipErrorMsg(zResult));
-		bReturn = false;
-	}
-	return bReturn;
-}
-
-
-void CExampleMFCDlg::OnBnClickedButton3() // unzip
+void CExampleMFCDlg::OnBnClickedButtonFilePathOutput() // 선택한 파일의 경로 출력 예제
 {
 	BROWSEINFO BrInfo;
 	TCHAR szBuffer[512];                                      // 경로저장 버퍼 
@@ -339,37 +227,13 @@ void CExampleMFCDlg::OnBnClickedButton3() // unzip
 }
 
 
-
-
-//Data::Data() // 생성자 매개변수가 없는 기본 생성자 입니다.
-//{
-//}
-//
-//Data::Data(int _width, int _height) // 기본 생성자가 아닌 2개의 매개변수를 갖는 생성자 입니다.
-//{
-//	setData(_width, _height);
-//}
-//
-//Shape::Shape(Data elements)
-//{
-//}
-//
-
-
-void CExampleMFCDlg::OnBnClickedButton4()
+void CExampleMFCDlg::OnBnClickedButtonThreadTest() // 스레드 테스트
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-}
-
-
-void CExampleMFCDlg::OnBnClickedButton5() // 스레드 테스트
-{
-	// 작업자 스레드
-
+	// 유저 인터페이스 스레드는 해당Dlg, App실행한 메인 주 쓰레드를 말하게되며,
+	// 작업자 스레드는 현재 함수에 존재하는 쓰레드를 의미한다
 	UINT n = 600;
 
 	// ** 완전 중요
-
 	// 스레드를 사용한경우!
 	AfxBeginThread(ThreadFunc, (LPVOID)n);
 
@@ -379,167 +243,57 @@ void CExampleMFCDlg::OnBnClickedButton5() // 스레드 테스트
 }
 UINT CExampleMFCDlg::ThreadFunc(LPVOID pParam)
 {
-
 	UINT n = (UINT)pParam;
-
-
-	UINT sum = 0;
+	UINT nSum = 0;
 	for (UINT i = 1; i < n; ++i)
 	{
 		// 스레드로 동작하는 것을 확인하기 위해서
 		// 0.01초간 대기 시간을 둔다.
 
-		sum += i;
+		nSum += i;
 		Sleep(10);
 	}
 
 	//계산결과 출력
 	CString str;
-	str.Format(_T("계산 결과 = %d"), sum);
+	str.Format(_T("계산 결과 = %d"), nSum);
 	AfxMessageBox(str);
 
 	return 0;
 }
 
 
-void CExampleMFCDlg::OnBnClickedButton6() // 스마트 포인터
+void CExampleMFCDlg::OnBnClickedButtonSmartPointer() // 스마트 포인터
 {
 }
-void CExampleMFCDlg::OnBnClickedButton7() // 람다 표현식
+void CExampleMFCDlg::OnBnClickedButtonLamdaExpr() // 람다 표현식
 {
-	CLamdaExpr lamda;                    // Accumulator 함수 객체 클래스로부터 객체 a를 선언한다.
+	CLamdaExpr lamda;                    
 	lamda.testLamda();
 }
-
 bool CExampleMFCDlg::GetCurrentLogonUserName(/*[out]*/ LPTSTR& lpszAccountName, /*[out]*/ LPTSTR& lpszReferencedDomainName)
 {
-	HANDLE           hToken = NULL;
-	LPBYTE lpBytes = NULL;
-	PTOKEN_USER  lpTokenUser = NULL;
-	DWORD            dwSize = 0;
-	BOOL             bSuccess;
-
-	// get token handle
-	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
-	{
-		return false;
-	}
-
-	GetTokenInformation
-	(
-		hToken,
-		TokenUser,
-		(LPVOID)NULL,
-		0,
-		&dwSize
-	);
-
-	lpBytes = new BYTE[dwSize];
-	lpTokenUser = (PTOKEN_USER)lpBytes;
-
-	bSuccess = GetTokenInformation
-	(
-		hToken,
-		TokenUser,
-		(LPVOID)lpTokenUser,
-		dwSize,
-		&dwSize
-	);
-
-	CloseHandle(hToken);
-	hToken = NULL;
-	if (!bSuccess)
-	{
-		if (lpBytes)
-		{
-			delete[] lpBytes;
-			lpBytes = NULL;
-		}
-		lpTokenUser = NULL;
-		return false;
-	}
-
-	DWORD   dwSize01 = 0;
-	DWORD   dwSize02 = 0;
-	SID_NAME_USE sid_name_use;
-
-
-	CString strTemp = (LPTSTR)(LPCSTR)(PSID)((lpTokenUser->User).Sid);
-
-	LookupAccountSid(
-		NULL,
-		(PSID)((lpTokenUser->User).Sid),
-		(LPTSTR)lpszAccountName,
-		(LPDWORD)&dwSize01,
-		(LPTSTR)lpszReferencedDomainName,
-		(LPDWORD)&dwSize02,
-		(PSID_NAME_USE)&sid_name_use
-	);
-
-	lpszAccountName = new TCHAR[dwSize01];
-	lpszReferencedDomainName = new TCHAR[dwSize02];
-
-	bSuccess = LookupAccountSid(
-		NULL,
-		(PSID)((lpTokenUser->User).Sid),
-		(LPTSTR)lpszAccountName,
-		(LPDWORD)&dwSize01,
-		(LPTSTR)lpszReferencedDomainName,
-		(LPDWORD)&dwSize02,
-		(PSID_NAME_USE)&sid_name_use
-	);
-
-	delete[] lpBytes;
-	lpBytes = NULL;
-	lpTokenUser = NULL;
-
-	return (bSuccess == TRUE);
 }
 
-
-void CExampleMFCDlg::OnBnClickedButton8() // HKEY_USERS
+void CExampleMFCDlg::OnBnClickedButtonZip()
 {
-	LPTSTR lpszAccountName = NULL;
-	LPTSTR lpszReferencedDomainName = NULL;
-
-	bool bRetTemp2 = GetCurrentLogonUserName(lpszAccountName, lpszReferencedDomainName);
-
-	CString sz;
-	sz.Format(_T("%s / %s"), lpszAccountName, lpszReferencedDomainName);
-	AfxMessageBox(sz);
-
-	if (lpszAccountName)
-	{
-		delete[] lpszAccountName;
-		lpszAccountName = NULL;
-	}
-
-	if (lpszReferencedDomainName)
-	{
-		delete[] lpszReferencedDomainName;
-		lpszReferencedDomainName = NULL;
-	}	
+	CLJHZip zip;
+	zip.CreateZipFile();
+	//CString strMessage = GetZipErrorMsg();
 }
-
-
-void CExampleMFCDlg::OnBnClickedButton9() // 정적, 동적 바인딩
+void CExampleMFCDlg::OnBnClickedButtonBinding() // 정적, 동적 바인딩
 {
-	LJHBase obase;
-	LJHChildA child;
-	LJHBase *pbase = new LJHBase;
-	LJHBase &rbase = child;
+	CLJHBase obase;
+	CLJHChildA child;
+	CLJHBase *pbase = new CLJHBase;
+	CLJHBase &rbase = child;
 
 	int nTest(0);
 	nTest = obase.VirtualTest();				// 정적 바인딩
 	nTest = child.VirtualTest();				// 정적 바인딩
 	nTest = pbase->VirtualTest();				// 동적 바인딩
 	nTest = rbase.VirtualTest();				// 동적 바인딩
-
 }
-
-
-
-
 void CExampleMFCDlg::OnBnClickedButtonCreateDump()
 {
 	CCreateDump::Begin();

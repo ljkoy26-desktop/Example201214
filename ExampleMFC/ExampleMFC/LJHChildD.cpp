@@ -2,12 +2,12 @@
 #include "LJHChildD.h"
 
 
-LJHChildD::LJHChildD()
+CLJHChildD::CLJHChildD()
 {
 	m_nType = D;
 }
 
 
-LJHChildD::~LJHChildD()
+CLJHChildD::~CLJHChildD()
 {
 }

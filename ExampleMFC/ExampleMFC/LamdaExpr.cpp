@@ -7,20 +7,10 @@
 #include <vector>
 #include <array>
 
-
 // 출처: https://vallista.tistory.com/entry/C-11-Lambda-Expression-람다-표현식-함수-객체-Functor [VallistA]
-
-//CLamdaExpr::CLamdaExpr()
-//{
-//
-//
-//}
-//
 
 CLamdaExpr::~CLamdaExpr()
 {
-
-
 }
 
 int CLamdaExpr::testLamda()
@@ -30,17 +20,13 @@ int CLamdaExpr::testLamda()
 	// 함수 포인터와 동작은 비슷하지만 함수내에서 값이 사라지지 않는다는 특징이 있으며,
 	// 인라인 함수로 처리될수 있기에 이점이 있습니다.
 
-	Accumulator a;                   
-	std::cout << a(10) << std::endl; 
+	Accumulator a;
+	std::cout << a(10) << std::endl;
 	std::cout << a(20) << std::endl;
 
 	int min = 0;
 	int max = 10;
 	//std::for_each(min, max, testFunc());
-
-
-
-
 
 	CLamdaExpr functor;
 	std::array<int, 10> theList = { 1,2,3,4,5,6,7,8,9,10 }; // Uniform Initialization 으로 초기화
@@ -51,10 +37,6 @@ int CLamdaExpr::testLamda()
 
 	std::cout << "Sum of evens: " << functor.sumEven() << std::endl;
 	std::cout << "Sum of odds: " << functor.sumOdd() << std::endl;
-
-
-
-
 
 	return 0;
 }

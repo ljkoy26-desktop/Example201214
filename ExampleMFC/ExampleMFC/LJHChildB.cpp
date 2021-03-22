@@ -2,12 +2,12 @@
 #include "stdafx.h"
 #include "LJHChildB.h"
 
-LJHChildB::LJHChildB()
+CLJHChildB::CLJHChildB()
 {
 	m_nType = B;
 }
 
 
-LJHChildB::~LJHChildB()
+CLJHChildB::~CLJHChildB()
 {
 }

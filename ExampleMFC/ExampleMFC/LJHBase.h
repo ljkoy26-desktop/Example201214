@@ -1,8 +1,11 @@
 #pragma once
-class LJHBase
+class CLJHBase
 {
 public:
+	CLJHBase();
+	virtual ~CLJHBase();
 
+public:
 	enum EM_TYPE {
 		BASE = 0,
 		A = 1,
@@ -11,11 +14,8 @@ public:
 		D 
 	};
 	int m_nType;
-	CArray<LJHBase*, LJHBase*> m_aItem;
+	CArray<CLJHBase*, CLJHBase*> m_aItem;
 	
-	LJHBase();
-	virtual ~LJHBase();
-
 	int virtual VirtualTest() { return -1; };
 };
 

@@ -2,13 +2,13 @@
 #include "stdafx.h"
 #include "LJHChildC.h"
 
-LJHChildC::LJHChildC()
+CLJHChildC::CLJHChildC()
 {
 	m_nType = C;
 }
 
 
-LJHChildC::~LJHChildC()
+CLJHChildC::~CLJHChildC()
 {
 
 }

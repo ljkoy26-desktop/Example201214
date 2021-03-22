@@ -1,10 +1,10 @@
 #pragma once
 #include "LJHBase.h"
 
-class LJHChildC : public LJHBase
+class CLJHChildC : public CLJHBase
 {
 public:
-	LJHChildC();
-	virtual ~LJHChildC();
+	CLJHChildC();
+	virtual ~CLJHChildC();
 };
 

@@ -66,6 +66,9 @@
     <ClInclude Include="CreateDump.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="LJHZip.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExampleMFC.cpp">
@@ -75,9 +78,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WVBase.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LJHChildA.cpp">
@@ -108,6 +108,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CreateDump.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LJHBase.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LJHZip.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

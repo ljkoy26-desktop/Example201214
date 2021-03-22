@@ -5,15 +5,11 @@
 
 CCreateDump::CCreateDump()
 {
-
 }
 
 CCreateDump::~CCreateDump()
 {
-
 }
-
-
 
 typedef BOOL(WINAPI* MINIDUMPWRITEDUMP)( // Callback 함수의 원형
 	HANDLE hProcess,
@@ -36,7 +32,6 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 	if (DllHandle)
 	{
 		MINIDUMPWRITEDUMP Dump = (MINIDUMPWRITEDUMP)GetProcAddress(DllHandle, "MiniDumpWriteDump");
-
 		if (Dump)
 		{
 			TCHAR        DumpPath[MAX_PATH] = { 0, };
@@ -95,15 +90,12 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 BOOL CCreateDump::Begin(VOID)
 {
 	SetErrorMode(SEM_FAILCRITICALERRORS);
-
 	PreviousExceptionFilter = SetUnhandledExceptionFilter(UnHandledExceptionFilter);
-
 	return true;
 }
 
 BOOL CCreateDump::End(VOID)
 {
 	SetUnhandledExceptionFilter(PreviousExceptionFilter);
-
 	return true;
 }
