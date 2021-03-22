@@ -136,7 +136,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -185,6 +185,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateDump.h" />
     <ClInclude Include="ExampleMFC.h" />
     <ClInclude Include="ExampleMFCDlg.h" />
     <ClInclude Include="ExampleView.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="zip.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateDump.cpp" />
     <ClCompile Include="ExampleMFC.cpp" />
     <ClCompile Include="ExampleMFCDlg.cpp" />
     <ClCompile Include="ExampleView.cpp" />

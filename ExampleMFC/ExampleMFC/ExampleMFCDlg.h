@@ -11,6 +11,12 @@
 
 #include "ExampleView.h"
 // CExampleMFCDlg 대화 상자
+class CTestObject
+{
+public:
+	BOOL m_bOpen;
+};
+
 class CExampleMFCDlg : public CDialogEx
 {
 // 생성입니다.
@@ -25,16 +31,18 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
-		
+	BOOL mIsOpened;
+
 // 구현입니다.
 protected:
-
+	
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();	
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 public:
+	
 	HICON m_hIcon;
 	HZIP m_hZip;
 	CExampleView* m_pView;
@@ -57,5 +65,6 @@ public:
 	afx_msg void OnBnClickedButton7();
 	afx_msg void OnBnClickedButton8();
 	afx_msg void OnBnClickedButton9();
+	afx_msg void OnBnClickedButtonCreateDump();
 };
 

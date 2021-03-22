@@ -17,6 +17,12 @@
 #include <iostream>
 #include <vector>
 
+#include "CreateDump.h"
+
+// 덤프를 위한 헤더파일, 정적라이브러리 링크
+#include <DbgHelp.h> 
+#pragma comment ( lib, "DbgHelp" )
+
 class LJHChildA;
 class LJHChildB;
 class LJHChildC;
@@ -89,6 +95,7 @@ BEGIN_MESSAGE_MAP(CExampleMFCDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON7, &CExampleMFCDlg::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON8, &CExampleMFCDlg::OnBnClickedButton8)
 	ON_BN_CLICKED(IDC_BUTTON9, &CExampleMFCDlg::OnBnClickedButton9)
+	ON_BN_CLICKED(IDC_BUTTON_CREATE_DUMP, &CExampleMFCDlg::OnBnClickedButtonCreateDump)
 END_MESSAGE_MAP()
 
 
@@ -528,4 +535,19 @@ void CExampleMFCDlg::OnBnClickedButton9() // 정적, 동적 바인딩
 	nTest = pbase->VirtualTest();				// 동적 바인딩
 	nTest = rbase.VirtualTest();				// 동적 바인딩
 
+}
+
+
+
+
+void CExampleMFCDlg::OnBnClickedButtonCreateDump()
+{
+	CCreateDump::Begin();
+	/*	Begin ~ End 이부분에 예외가 생길 코드가 들어가면 됩니다. */
+
+	CTestObject* m_obj = new CTestObject;
+	m_obj = NULL;
+	m_obj->m_bOpen = false;
+
+	CCreateDump::End();
 }
