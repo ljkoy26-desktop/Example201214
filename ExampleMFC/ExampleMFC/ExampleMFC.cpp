@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "ExampleMFC.h"
 #include "ExampleMFCDlg.h"
-
+#include "CreateDump.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -50,7 +50,7 @@ BOOL CExampleMFCApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinApp::InitInstance();
-
+	CCreateDump::Begin();
 
 	AfxEnableControlContainer();
 

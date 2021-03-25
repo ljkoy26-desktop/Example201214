@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LJHZip.h"
+#include <vector>
 
 CLJHZip::CLJHZip()
 {
@@ -9,6 +10,15 @@ CLJHZip::~CLJHZip()
 }
 void CLJHZip::CreateZipFile() // ZIP
 {
+	//CTestObject2* m_obj = new CTestObject2;
+	//m_obj = NULL;
+	//m_obj->m_bOpen = false;
+
+	std::vector<int> vec;
+	vec.push_back(1);
+	vec.push_back(2);
+	vec.at(3);
+
 	ZRESULT zResult;
 
 	// 하위 경로를 깃허브 바로위 디렉토리 까지 구하기 위해 호출한다 ( D:\GitHub\Example201214 ) 최종경로

@@ -18,10 +18,7 @@
 #include <iostream>
 #include <vector>
 
-// 덤프를 위한 헤더파일, 정적라이브러리 링크
-#include <DbgHelp.h> 
 #include "CreateDump.h"
-#pragma comment ( lib, "DbgHelp" )
 
 class CLJHChildA;
 class CLJHChildB;
@@ -296,12 +293,27 @@ void CExampleMFCDlg::OnBnClickedButtonBinding() // 정적, 동적 바인딩
 }
 void CExampleMFCDlg::OnBnClickedButtonCreateDump()
 {
-	CCreateDump::Begin();
 	/*	Begin ~ End 이부분에 예외가 생길 코드가 들어가면 됩니다. */
+	// 1. Visual Studio 2015 버전에서 미니덤프 파일 생성 테스트
+	//	- 네이티브 전용으로 디버그 옵션을 사용하면, 프로그램이 직접적인 예외를 발생한 부분을 발견할수 있습니다.
+	// 2. 소스코드에 변경사항이 있을경우, 이전 데이터를 찾을수 없게됩니다.
 
-	CTestObject* m_obj = new CTestObject;
-	m_obj = NULL;
-	m_obj->m_bOpen = false;
+	CCreateDump dump;
+	//dump.Begin();
+	//dump.TestDump1();
+	//dump.TestDump2();
+	//dump.TestDump3();
+	//dump.End();
+	int n(11);
+	CCreateDump::Begin();
 
-	CCreateDump::End();
+	//dump.TestDump1();
+	//dump.TestDump3();
+	dump.TestDump4();
+	//dump.TestDump3();
+	//CTestObject* m_obj = new CTestObject;
+	//m_obj = NULL;
+	//m_obj->m_bOpen = false;
+
+	//CCreateDump::End();
 }

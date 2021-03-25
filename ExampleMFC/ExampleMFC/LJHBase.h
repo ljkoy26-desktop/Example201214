@@ -16,6 +16,6 @@ public:
 	int m_nType;
 	CArray<CLJHBase*, CLJHBase*> m_aItem;
 	
-	int virtual VirtualTest() { return -1; };
+	virtual int VirtualTest() { return -1; };
 };
 

@@ -2,6 +2,11 @@
 
 #include "unzip.h"
 #include "zip.h"
+class CTestObject2
+{
+public:
+	BOOL m_bOpen;
+};
 
 class CLJHZip
 {

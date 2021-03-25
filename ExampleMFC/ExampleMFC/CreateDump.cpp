@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CreateDump.h"
-
 #include <DbgHelp.h>
+#include <vector>
 
 CCreateDump::CCreateDump()
 {
@@ -20,13 +20,13 @@ typedef BOOL(WINAPI* MINIDUMPWRITEDUMP)( // Callback 함수의 원형
 	CONST PMINIDUMP_USER_STREAM_INFORMATION UserStreamParam,
 	CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam);
 
-LPTOP_LEVEL_EXCEPTION_FILTER PreviousExceptionFilter = NULL;
+LPTOP_LEVEL_EXCEPTION_FILTER m_PreviousExceptionFilter = NULL;
 
 LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 {
-	HMODULE    DllHandle = NULL;
-
 	// Windows 2000 이전에는 따로 DBGHELP를 배포해서 설정해 주어야 한다.
+
+	HMODULE    DllHandle = NULL;	
 	DllHandle = LoadLibrary(_T("DBGHELP.DLL"));
 
 	if (DllHandle)
@@ -39,7 +39,7 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 
 			GetLocalTime(&SystemTime);
 
-			_sntprintf(DumpPath, MAX_PATH, _T("%d-%d-%d %d_%d_%d.dmp"),
+			_sntprintf(DumpPath, MAX_PATH, _T("%04d-%02d-%02d %02d_%02d_%02d.dmp"),
 				SystemTime.wYear,
 				SystemTime.wMonth,
 				SystemTime.wDay,
@@ -67,7 +67,7 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 					GetCurrentProcess(),
 					GetCurrentProcessId(),
 					FileHandle,
-					MiniDumpNormal,
+					MiniDumpWithProcessThreadData,
 					&MiniDumpExceptionInfo,
 					NULL,
 					NULL);
@@ -90,12 +90,42 @@ LONG WINAPI UnHandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo)
 BOOL CCreateDump::Begin(VOID)
 {
 	SetErrorMode(SEM_FAILCRITICALERRORS);
-	PreviousExceptionFilter = SetUnhandledExceptionFilter(UnHandledExceptionFilter);
+	m_PreviousExceptionFilter = SetUnhandledExceptionFilter(UnHandledExceptionFilter);
 	return true;
 }
 
 BOOL CCreateDump::End(VOID)
 {
-	SetUnhandledExceptionFilter(PreviousExceptionFilter);
+	SetUnhandledExceptionFilter(m_PreviousExceptionFilter);
 	return true;
+}
+
+
+void CCreateDump::TestDump1()
+{
+	// 덤프가 만들어지는 예외가 아닙니다.
+	//int nZero(0);
+	//int i = 1 / nZero;
+}
+void CCreateDump::TestDump2()
+{
+	// 덤프가 만들어지는 예외가 아닙니다.
+	//int *n = new int;
+	//delete n;
+	//delete n;
+}
+void CCreateDump::TestDump3()
+{
+	CTestObject* m_obj = new CTestObject;
+	m_obj = NULL;
+	m_obj->m_bOpen = false;
+}
+void CCreateDump::TestDump4()
+{
+	//std::out_of_range
+
+	std::vector<int> vec;
+	vec.push_back(1);
+	vec.push_back(2);
+	vec.at(3);
 }

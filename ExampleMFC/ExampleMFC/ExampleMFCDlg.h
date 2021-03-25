@@ -2,12 +2,6 @@
 #include "afxwin.h"
 #include "ExampleView.h"
 
-class CTestObject
-{
-public:
-	BOOL m_bOpen;
-};
-
 class CExampleMFCDlg : public CDialogEx
 {
 public:
