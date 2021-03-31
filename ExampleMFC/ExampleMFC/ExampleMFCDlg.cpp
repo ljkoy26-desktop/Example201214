@@ -275,7 +275,7 @@ bool CExampleMFCDlg::GetCurrentLogonUserName(/*[out]*/ LPTSTR& lpszAccountName, 
 void CExampleMFCDlg::OnBnClickedButtonZip()
 {
 	// Jenkins WebHook Test
-	// Jenkins WebHook Test...
+	// Jenkins WebHook Test....
 
 	CLJHZip zip;
 	zip.CreateZipFile();
